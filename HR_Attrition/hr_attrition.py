@@ -7,7 +7,7 @@ import pickle
 from sklearn.naive_bayes import GaussianNB
 
 st.title("Welcome to the HR Employee Attrition App")
-
+data = pd.read_csv("data_clean.csv")
 #checking the data
 st.write("This is an application for predict is your employee have chance for resign or not based on your input.")
 st.write("Fill out the required data below and see the chances of resign.")
@@ -46,7 +46,11 @@ job_rol = np.where(job_rol == 'Research Director', 0,
 
 #import model
 filename = 'naive_bayes_model.sav'
-loaded_model = pickle.load(open(filename, 'rb'))
+#loaded_model = pickle.load(open(filename, 'rb'))
+loaded_model = GaussianNB()
+X = data.drop("Attrition", axis=1)
+y = data['Attrition']
+loaded_model.fit(X,y)
 predictions = loaded_model.predict_proba([[bus_tra, mar_sta, ovr_time, job_rol, work_years, job_level, curr_years, income, age]])[0][1]
 
 if st.button("Predict"):
